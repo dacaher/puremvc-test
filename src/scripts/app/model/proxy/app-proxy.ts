@@ -1,7 +1,15 @@
+import {BaseProxy} from "app/model/proxy/base-proxy";
 import {AppVO} from "app/model/vo/app-vo";
-import {Proxy} from "puremvc";
 
-export class AppProxy extends Proxy {
+export class AppProxy extends BaseProxy<AppVO> {
+
+    public onRemove(): void {
+        // TODO impl
+    }
+
+    public onRegister(): void {
+        // TODO impl
+    }
 
     public togglePlayingMusic(): void {
         this.vo.playingMusic = !this.vo.playingMusic;
@@ -21,9 +29,5 @@ export class AppProxy extends Proxy {
 
     public getAppHeight(): number {
         return this.vo.appHeight;
-    }
-
-    private get vo(): AppVO {
-        return this.data as AppVO;
     }
 }

@@ -1,20 +1,16 @@
 import {NotificationNames} from "app/constants/notification-names";
 import {ProxyNames} from "app/constants/proxy-names";
 import {AppProxy} from "app/model/proxy/app-proxy";
+import {BaseMediator} from "app/view/mediator/base-mediator";
 import {MainComponent} from "app/view/ui/main-component";
-import {INotification, Mediator} from "puremvc";
+import {INotification} from "puremvc";
 
-export class MainMediator extends Mediator {
+export class MainMediator extends BaseMediator<MainComponent> {
+
     constructor(mediatorName?: string, viewComponent?: MainComponent) {
         super(mediatorName, viewComponent);
 
         this.addListeners();
-    }
-
-    public listNotificationInterests(): string[] {
-        return [
-            NotificationNames.ALL_TEXTURES_LOADED,
-        ];
     }
 
     public handleNotification(notification: INotification): void {
@@ -26,24 +22,21 @@ export class MainMediator extends Mediator {
         }
     }
 
+    public listNotificationInterests(): string[] {
+        return [
+            NotificationNames.ALL_TEXTURES_LOADED,
+        ];
+    }
+
     public onRegister(): void {
         // TODO impl
     }
 
-    public onRemove(): void {
-        this.removeListeners();
-        this.view.destroy(); // TODO destroy viewComp ???
+    protected removeListeners(): void {
+        throw new Error("Method not implemented.");
     }
 
-    public get view(): MainComponent {
-        return this.viewComponent as MainComponent; // TODO no se si funcionara al sobrescribir el metodo getViewComponent
-    }
-
-    private addListeners(): void {
-        // TODO impl
-    }
-
-    private removeListeners(): void {
+    protected addListeners(): void {
         // TODO impl
     }
 }
