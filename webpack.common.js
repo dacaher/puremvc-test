@@ -41,6 +41,7 @@ module.exports = {
         modules: ['node_modules'],
         alias: {
             'styles': path.resolve(__dirname, 'src/styles/'),
+            'resources': path.resolve(__dirname, 'src/resources/'),
             // 'vendor': path.resolve(__dirname, 'src/scripts/vendor/'),
             // 'app': path.resolve(__dirname, 'src/scripts/app/'),
             // 'pixi-app-wrapper': path.resolve(__dirname, 'src/scripts/vendor/dacaher/pixi-app-wrapper'),

@@ -1,4 +1,4 @@
-import {ProxyNames} from "app/constants/proxy-names";
+import {ProxyNames} from "app/global/constants/proxy-names";
 import {AppProxy} from "app/model/proxy/app-proxy";
 import {AssetsProxy} from "app/model/proxy/assets-proxy";
 import {AppVO} from "app/model/vo/app-vo";
@@ -9,6 +9,8 @@ import {INotification, SimpleCommand} from "puremvc";
 export class PrepModelCommand extends SimpleCommand {
 
     public execute(notification: INotification): void {
+        window.console.log("PrepModelCommand executed!");
+
         const app: SampleMvcApp = notification.getBody() as SampleMvcApp;
 
         // Data init
@@ -18,7 +20,5 @@ export class PrepModelCommand extends SimpleCommand {
         // Proxies init
         this.facade().registerProxy(appProxy);
         this.facade().registerProxy(assetsProxy);
-
-        window.console.log("PrepModelCommand executed!", notification);
     }
 }

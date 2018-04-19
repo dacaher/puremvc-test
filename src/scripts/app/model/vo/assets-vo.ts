@@ -1,4 +1,4 @@
-import {Asset} from "app/model/interfaces/asset";
+import {Asset} from "app/global/interfaces/asset";
 
 export class AssetsVO {
     // TODO hace falta tenerlo separado??

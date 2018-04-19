@@ -1,5 +1,5 @@
-import {NotificationNames} from "app/constants/notification-names";
-import {ProxyNames} from "app/constants/proxy-names";
+import {NotificationNames} from "app/global/constants/notification-names";
+import {ProxyNames} from "app/global/constants/proxy-names";
 import {AppProxy} from "app/model/proxy/app-proxy";
 import {BaseMediator} from "app/view/mediator/base-mediator";
 import {MainComponent} from "app/view/ui/main-component";

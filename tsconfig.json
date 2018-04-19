@@ -28,7 +28,8 @@
       "pixi-filters": ["src/scripts/vendor/pixijs/pixi-filters"],
       "@pixi/filter-*": ["src/scripts/vendor/pixijs/pixi-filters/filters/filter-*"],
       "howler": ["src/scripts/vendor/goldfire/howler.js"],
-      "puremvc": ["src/scripts/vendor/puremvc"]
+      "puremvc": ["src/scripts/vendor/puremvc"],
+      "resources/*": ["src/resources/*"]
     }
   },
   "include": [

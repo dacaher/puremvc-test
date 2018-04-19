@@ -1,5 +1,5 @@
 import {AppFacade} from "app/app-facade";
-import {NotificationNames} from "app/constants/notification-names";
+import {NotificationNames} from "app/global/constants/notification-names";
 import {Dom, PixiAppWrapper as PixiApp, pixiAppWrapperEvent as WrapperEvent} from "pixi-app-wrapper";
 
 export class SampleMvcApp extends PixiApp {

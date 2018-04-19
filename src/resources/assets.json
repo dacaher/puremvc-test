@@ -1,0 +1,48 @@
+{
+  "textures": [
+    {
+      "id": "explorer",
+      "url": "assets/gfx/explorer.png",
+      "priority": 0
+    },
+    {
+      "id": "bunny",
+      "url": "assets/gfx/bunny.png",
+      "priority": 0
+    },
+    {
+      "id": "bubble",
+      "url": "assets/gfx/Bubbles99.png",
+      "priority": 0
+    },
+    {
+      "id": "play",
+      "url": "assets/gfx/play.png",
+      "priority": 0
+    },
+    {
+      "id": "stop",
+      "url": "assets/gfx/stop.png",
+      "priority": 0
+    },
+    {
+      "id": "spineboy",
+      "url": "assets/gfx/spineboy.json",
+      "priority": 0
+    }
+  ],
+  "animations": [
+    {
+      "id": "spineboy",
+      "url": "assets/gfx/spineboy.json",
+      "priority": 0
+    }
+  ],
+  "sounds": [
+    {
+      "id": "music",
+      "url": "assets/sfx/sound1.mp3",
+      "priority": 0
+    }
+  ]
+}

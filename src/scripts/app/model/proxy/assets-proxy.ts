@@ -1,5 +1,5 @@
-import {NotificationNames} from "app/constants/notification-names";
-import {Asset} from "app/model/interfaces/asset";
+import {NotificationNames} from "app/global/constants/notification-names";
+import {Asset} from "app/global/interfaces/asset";
 import {BaseProxy} from "app/model/proxy/base-proxy";
 import {AssetsVO} from "app/model/vo/assets-vo";
 
@@ -27,6 +27,10 @@ export class AssetsProxy extends BaseProxy<AssetsVO> {
 
     public addAsset(asset: Asset): void {
         this.vo.addAsset(asset);
+    }
+
+    public addAssets(assets: Asset[]): void {
+        assets.forEach(asset => this.addAsset(asset));
     }
 
     public loadTextures(): void {
