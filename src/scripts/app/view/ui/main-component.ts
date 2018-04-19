@@ -50,6 +50,19 @@ export class MainComponent extends BaseComponent {
         this.drawSpineBoyAnim(appWidth * 0.5, appHeight);
     }
 
+    public stopEmittingParticles(): void {
+        if (this.particlesEmitter) {
+            this.particlesEmitter.emit = false;
+            this.particlesEmitter.cleanup();
+        }
+    }
+
+    public startEmittingParticles(): void {
+        if (this.particlesEmitter) {
+            this.particlesEmitter.emit = true;
+        }
+    }
+
     private drawSquare(x = 0, y = 0, s = 50, r = 10): void {
         this.drawRoundedRectangle(x, y, s, s, r);
     }
@@ -302,16 +315,4 @@ export class MainComponent extends BaseComponent {
         this.addChild(this.spineBoy);
     }
 
-    private stopEmittingParticles(): void {
-        if (this.particlesEmitter) {
-            this.particlesEmitter.emit = false;
-            this.particlesEmitter.cleanup();
-        }
-    }
-
-    private startEmittingParticles(): void {
-        if (this.particlesEmitter) {
-            this.particlesEmitter.emit = true;
-        }
-    }
 }

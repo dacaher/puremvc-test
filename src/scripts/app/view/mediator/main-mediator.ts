@@ -19,12 +19,22 @@ export class MainMediator extends BaseMediator<MainComponent> {
                 const appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
                 this.view.init(appProxy.getAppWidth(), appProxy.getAppHeight());
                 break;
+
+            case NotificationNames.RESIZE_START:
+                this.view.stopEmittingParticles();
+                break;
+
+            case NotificationNames.RESIZE_END:
+                this.view.startEmittingParticles();
+                break;
         }
     }
 
     public listNotificationInterests(): string[] {
         return [
             NotificationNames.ALL_TEXTURES_LOADED,
+            NotificationNames.RESIZE_START,
+            NotificationNames.RESIZE_END,
         ];
     }
 
