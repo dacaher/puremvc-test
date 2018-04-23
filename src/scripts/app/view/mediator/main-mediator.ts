@@ -6,6 +6,7 @@ import {MainComponent} from "app/view/ui/main-component";
 import {INotification} from "puremvc";
 
 export class MainMediator extends BaseMediator<MainComponent> {
+    private appProxy: AppProxy;
 
     constructor(mediatorName?: string, viewComponent?: MainComponent) {
         super(mediatorName, viewComponent);
@@ -16,15 +17,17 @@ export class MainMediator extends BaseMediator<MainComponent> {
     public handleNotification(notification: INotification): void {
         switch (notification.getName()) {
             case NotificationNames.ALL_TEXTURES_LOADED:
-                const appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
-                this.view.init(appProxy.getAppWidth(), appProxy.getAppHeight());
+                this.appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+                this.view.init(this.appProxy.getAppWidth(), this.appProxy.getAppHeight());
                 break;
 
             case NotificationNames.RESIZE_START:
+                this.view.visible = false;
                 this.view.stopEmittingParticles();
                 break;
 
             case NotificationNames.RESIZE_END:
+                this.view.visible = true;
                 this.view.startEmittingParticles();
                 break;
         }

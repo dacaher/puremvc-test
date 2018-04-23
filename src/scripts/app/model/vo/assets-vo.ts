@@ -2,22 +2,23 @@ import {Asset} from "app/global/interfaces/asset";
 
 export class AssetsVO {
     // TODO hace falta tenerlo separado??
-    private textures: { [key: string]: Asset };
-    private sounds: { [key: string]: Asset };
+    // TODO hace falta tenerlo en un diccionario??
+    private gfx: { [key: string]: Asset };
+    private sfx: { [key: string]: Asset };
 
     constructor() {
-        this.textures = {};
-        this.sounds = {};
+        this.gfx = {};
+        this.sfx = {};
     }
 
     public addAsset(asset: Asset): void {
         switch (asset.type) {
             case "texture":
-                this.textures[asset.id] = asset;
+                this.gfx[asset.id] = asset;
                 break;
 
             case "sound":
-                this.sounds[asset.id] = asset;
+                this.sfx[asset.id] = asset;
                 break;
 
             default:
@@ -25,35 +26,35 @@ export class AssetsVO {
         }
     }
 
-    public getTextureAssets(): Asset[] {
+    public getGfxAssets(): Asset[] {
         const assets: Asset[] = [];
 
-        for (const key in this.textures) {
-            if (this.textures[key]) {
-                assets.push(this.textures[key]);
+        for (const key in this.gfx) {
+            if (this.gfx[key]) {
+                assets.push(this.gfx[key]);
             }
         }
 
         return assets;
     }
 
-    public getTextureAsset(id: string): Asset {
-        return this.textures[id];
+    public getGfxAsset(id: string): Asset {
+        return this.gfx[id];
     }
 
-    public getSoundAssets(): Asset[] {
+    public getSfxAssets(): Asset[] {
         const assets: Asset[] = [];
 
-        for (const key in this.sounds) {
-            if (this.sounds[key]) {
-                assets.push(this.sounds[key]);
+        for (const key in this.sfx) {
+            if (this.sfx[key]) {
+                assets.push(this.sfx[key]);
             }
         }
 
         return assets;
     }
 
-    public getSoundAsset(id: string): Asset {
-        return this.sounds[id];
+    public getSfxAsset(id: string): Asset {
+        return this.sfx[id];
     }
 }

@@ -1,5 +1,8 @@
 import {HandleErrorCommand} from "app/controller/handle-error-command";
+import {InitSoundsCommand} from "app/controller/init-sounds-command";
+import {PlaySoundCommand} from "app/controller/play-sound-command";
 import {StartupCommand} from "app/controller/startup-command";
+import {StopSoundCommand} from "app/controller/stop-sound-command";
 import {NotificationNames} from "app/global/constants/notification-names";
 import {SampleMvcApp} from "app/sample-mvc-app";
 import {Facade} from "puremvc";
@@ -36,5 +39,8 @@ export class AppFacade extends Facade {
 
         this.registerCommand(NotificationNames.STARTUP, StartupCommand);
         this.registerCommand(NotificationNames.ERROR, HandleErrorCommand);
+        this.registerCommand(NotificationNames.ALL_SOUNDS_LOADED, InitSoundsCommand);
+        this.registerCommand(NotificationNames.PLAY_SOUND, PlaySoundCommand);
+        this.registerCommand(NotificationNames.STOP_SOUND, StopSoundCommand);
     }
 }

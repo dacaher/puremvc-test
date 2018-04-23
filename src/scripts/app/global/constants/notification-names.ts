@@ -7,4 +7,8 @@ export class NotificationNames {
     public static readonly ALL_TEXTURES_LOADED = "ALL_TEXTURES_LOADED";
     public static readonly ALL_SOUNDS_LOADED = "ALL_SOUNDS_LOADED";
     public static readonly ALL_ASSETS_LOADED = "ALL_ASSETS_LOADED";
+    public static readonly PLAY_SOUND = "PLAY_SOUND";
+    public static readonly STOP_SOUND = "STOP_SOUND";
+    public static readonly SOUNDS_READY = "SOUNDS_READY";
+    public static readonly SOUND_PLAY_ENDED = "SOUND_PLAY_ENDED";
 }

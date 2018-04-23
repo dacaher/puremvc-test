@@ -1,5 +1,5 @@
 {
-  "textures": [
+  "gfx": [
     {
       "id": "explorer",
       "url": "assets/gfx/explorer.png",
@@ -31,14 +31,7 @@
       "priority": 0
     }
   ],
-  "animations": [
-    {
-      "id": "spineboy",
-      "url": "assets/gfx/spineboy.json",
-      "priority": 0
-    }
-  ],
-  "sounds": [
+  "sfx": [
     {
       "id": "music",
       "url": "assets/sfx/sound1.mp3",

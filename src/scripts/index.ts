@@ -2,6 +2,7 @@
  * App bundle entry point.
  */
 import {SampleMvcApp} from "app/sample-mvc-app";
+import "howler"; // TODO where to inster this import!?
 import {pixiAppWrapperEvent as WrapperEvent} from "pixi-app-wrapper";
 import "styles/style.css";
 
