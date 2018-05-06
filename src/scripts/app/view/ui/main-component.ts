@@ -1,15 +1,7 @@
 import {RotatingSprite} from "app/rotating-sprite";
-import {ToggleSoundComponent} from "app/view/ui/toggle-sound-component";
 import {TweenLite} from "gsap";
 import {PixiAppWrapper as Wrapper} from "pixi-app-wrapper";
-import {
-    AsciiFilter,
-    CRTFilter,
-    GlowFilter,
-    OldFilmFilter,
-    OutlineFilter,
-    ShockwaveFilter,
-} from "pixi-filters";
+import {AsciiFilter, CRTFilter, GlowFilter, OldFilmFilter, OutlineFilter, ShockwaveFilter} from "pixi-filters";
 import "pixi-layers";
 import "pixi-particles";
 import "pixi-spine";
@@ -30,8 +22,6 @@ export class MainComponent extends BaseComponent {
     private appWidth: number;
     private appHeight: number;
 
-    private toggleSoundComponent: ToggleSoundComponent;
-
     constructor(ticker: PIXI.ticker.Ticker) {
         super(ticker);
     }
@@ -48,17 +38,6 @@ export class MainComponent extends BaseComponent {
         this.drawLayeredBunnies();
         this.drawParticles();
         this.drawSpineBoyAnim(appWidth * 0.5, appHeight);
-    }
-
-    public addToggleSoundComponent(x: number, y: number, z?: number, scale: number = 1): ToggleSoundComponent {
-        this.toggleSoundComponent = new ToggleSoundComponent(this.ticker);
-        this.toggleSoundComponent.position.set(x, y);
-        this.toggleSoundComponent.scale.set(scale, scale);
-        this.toggleSoundComponent.init();
-
-        this.addChild(this.toggleSoundComponent);
-
-        return this.toggleSoundComponent;
     }
 
     public stopEmittingParticles(): void {

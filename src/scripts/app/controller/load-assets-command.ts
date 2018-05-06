@@ -7,7 +7,7 @@ export class LoadAssetsCommand extends SimpleCommand {
     public execute(notification: INotification): void {
         const assetsProxy = this.facade().retrieveProxy(ProxyNames.ASSETS_PROXY) as AssetsProxy;
 
-        const assets = require("../../../resources/assets.json"); // TODO Fix this
+        const assets = require("../../../resources/assets.json"); // TODO Fix this relative url
 
         assetsProxy.addAssets(assets.gfx.map((current: any) => {
             current.type = "texture";

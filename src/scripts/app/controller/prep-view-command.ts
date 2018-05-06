@@ -19,9 +19,6 @@ export class PrepViewCommand extends SimpleCommand {
 
         // toggleSound comp
         const toggleSoundComponent = new ToggleSoundComponent(app.ticker);
-        // toggleSoundComponent.position.set(app.initialWidth / 2 - container.width / 2, app.initialHeight * 0.1); // TODO proper place to set view position, scale, layer, etc.?
-        toggleSoundComponent.position.set(app.initialWidth / 2, app.initialHeight * 0.1);
-
         mainComponent.addChild(toggleSoundComponent);
 
         // REGISTER ALL MEDIATORS

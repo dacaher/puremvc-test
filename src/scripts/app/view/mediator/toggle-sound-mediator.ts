@@ -1,5 +1,7 @@
 import {NotificationNames} from "app/global/constants/notification-names";
+import {ProxyNames} from "app/global/constants/proxy-names";
 import {SoundNames} from "app/global/constants/sound-names";
+import {AppProxy} from "app/model/proxy/app-proxy";
 import {BaseMediator} from "app/view/mediator/base-mediator";
 import {ToggleSoundComponent} from "app/view/ui/toggle-sound-component";
 import {INotification} from "puremvc";
@@ -27,7 +29,10 @@ export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
     public handleNotification(notification: INotification): void {
         switch (notification.getName()) {
             case NotificationNames.ALL_TEXTURES_LOADED:
-                this.view.init(); // TODO review initialization of views!!
+                const appProxy: AppProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+                // TODO review initialization of views!!
+                this.view.init();
+                this.view.position.set(appProxy.getAppWidth() / 2 - this.view.width / 2, appProxy.getAppHeight() * 0.1);
                 break;
 
             case NotificationNames.SOUNDS_READY:
