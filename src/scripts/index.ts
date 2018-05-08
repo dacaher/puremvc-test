@@ -9,6 +9,6 @@ import "styles/style.css";
 /*
  * YOUR CODE HERE
  */
-const sampleApp = new SampleMvcApp(1280, 720);
+const sampleApp = new SampleMvcApp(900, 1440);
 sampleApp.on(WrapperEvent.RESIZE_START, () => window.console.log("RESIZE STARTED!"));
 sampleApp.on(WrapperEvent.RESIZE_END, args => window.console.log("RESIZE ENDED!", args));

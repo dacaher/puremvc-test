@@ -13,8 +13,8 @@ export class SampleMvcApp extends PixiApp {
         super({
             width,
             height,
-            scale: "full-size",
-            align: "top-left",
+            scale: "keep-aspect-ratio",
+            align: "middle",
             resolution: window.devicePixelRatio,
             roundPixels: true,
             transparent: false,
