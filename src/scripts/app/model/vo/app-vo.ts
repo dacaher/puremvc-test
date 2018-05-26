@@ -18,7 +18,15 @@ export class AppVO {
         return this._appHeight;
     }
 
+    public set appHeight(value: number) {
+        this._appHeight = value;
+    }
+
     public get appWidth(): number {
         return this._appWidth;
+    }
+
+    public set appWidth(value: number) {
+        this._appWidth = value;
     }
 }

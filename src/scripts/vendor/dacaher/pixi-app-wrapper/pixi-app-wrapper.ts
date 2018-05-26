@@ -25,6 +25,7 @@ export interface PixiAppWrapperOptions extends PIXI.ApplicationOptions {
     height: number;
     align?: "top-left" | "top-center" | "top-right" | "middle-left" | "middle" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right";
     scale?: "none" | "keep-aspect-ratio" | "full-size";
+    changeOrientation?: boolean;
     showFPS?: boolean;
     showMediaInfo?: boolean;
 }
@@ -71,6 +72,7 @@ export class PixiAppWrapper extends EventEmitter {
 
     private width: number;
     private height: number;
+    private landscape: boolean;
 
     private alignStrategy: AlignStrategy;
     private scaleStrategy: ScaleStrategy;
@@ -154,6 +156,7 @@ export class PixiAppWrapper extends EventEmitter {
                     scaleY: this.stage.scale.y.toFixed(2),
                     scaling: this.appOptions.scale ? this.appOptions.scale.valueOf() : this.defaultScaleMethod,
                     alignment: this.appOptions.align ? this.appOptions.align.valueOf() : this.defaultAlignMethod,
+                    orientation: this.landscape ? "landscape" : "portrait",
                 },
             },
         };
@@ -162,6 +165,7 @@ export class PixiAppWrapper extends EventEmitter {
     private configure(options: PixiAppWrapperOptions): void {
         this.width = options.width;
         this.height = options.height;
+        this.landscape = (this.width >= this.height);
 
         switch (options.align) {
             case "top-center":
@@ -248,6 +252,9 @@ export class PixiAppWrapper extends EventEmitter {
             // resize
             this.renderer.resize(this.view.clientWidth, this.view.clientHeight);
 
+            // check orientation
+            const orientationChanged = this.orientate();
+
             // scale
             this.scale();
 
@@ -274,6 +281,10 @@ export class PixiAppWrapper extends EventEmitter {
                         width: this.initialWidth * this.stage.scale.x,
                         height: this.initialHeight * this.stage.scale.y,
                     },
+                    orientation: {
+                        landscape: this.landscape,
+                        changed: orientationChanged,
+                    },
                 },
                 view: {
                     width: this.view.width,
@@ -281,6 +292,32 @@ export class PixiAppWrapper extends EventEmitter {
                 },
             });
         }
+    }
+
+    private orientate(): boolean {
+        let changed = false;
+
+        if (this.appOptions.changeOrientation) {
+            if (this.landscape && this.view.clientHeight > this.view.clientWidth) {
+                // change to portrait mode
+                changed = true;
+                this.landscape = false;
+                this.swapSize();
+
+            } else if (!this.landscape && this.view.clientWidth > this.view.clientHeight) {
+                changed = true;
+                this.landscape = true;
+                this.swapSize();
+            }
+        }
+
+        return changed;
+    }
+
+    private swapSize(): void {
+        const tempW = this.width;
+        this.width = this.height;
+        this.height = tempW;
     }
 
     private scale(): void {

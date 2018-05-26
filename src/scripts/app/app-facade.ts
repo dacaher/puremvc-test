@@ -6,6 +6,7 @@ import {StopSoundCommand} from "app/controller/stop-sound-command";
 import {NotificationNames} from "app/global/constants/notification-names";
 import {SampleMvcApp} from "app/sample-mvc-app";
 import {Facade} from "puremvc";
+import {ResizeCommand} from "app/controller/resize-command";
 
 export class AppFacade extends Facade {
 
@@ -42,5 +43,6 @@ export class AppFacade extends Facade {
         this.registerCommand(NotificationNames.ALL_SOUNDS_LOADED, InitSoundsCommand);
         this.registerCommand(NotificationNames.PLAY_SOUND, PlaySoundCommand);
         this.registerCommand(NotificationNames.STOP_SOUND, StopSoundCommand);
+        this.registerCommand(NotificationNames.RESIZE_END, ResizeCommand);
     }
 }

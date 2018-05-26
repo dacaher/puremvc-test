@@ -27,7 +27,15 @@ export class AppProxy extends BaseProxy<AppVO> {
         return this.vo.appWidth;
     }
 
+    public setAppWidth(w: number): void {
+        this.vo.appWidth = w;
+    }
+
     public getAppHeight(): number {
         return this.vo.appHeight;
+    }
+
+    public setAppHeight(h: number): void {
+        this.vo.appHeight = h;
     }
 }

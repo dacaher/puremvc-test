@@ -23,13 +23,16 @@ export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
             NotificationNames.ALL_TEXTURES_LOADED,
             NotificationNames.SOUNDS_READY,
             NotificationNames.SOUND_PLAY_ENDED,
+            NotificationNames.RESIZE_END,
         ];
     }
 
     public handleNotification(notification: INotification): void {
+        let appProxy: AppProxy;
+
         switch (notification.getName()) {
             case NotificationNames.ALL_TEXTURES_LOADED:
-                const appProxy: AppProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+                appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
                 // TODO review initialization of views!!
                 this.view.init();
                 this.view.position.set(appProxy.getAppWidth() / 2 - this.view.width / 2, appProxy.getAppHeight() * 0.1);
@@ -41,6 +44,11 @@ export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
 
             case NotificationNames.SOUND_PLAY_ENDED:
                 this.view.showPlayButton(); // Sound ended, show play button again!
+                break;
+
+            case NotificationNames.RESIZE_END:
+                appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+                this.view.position.set(appProxy.getAppWidth() / 2 - this.view.width / 2, appProxy.getAppHeight() * 0.1);
                 break;
         }
     }

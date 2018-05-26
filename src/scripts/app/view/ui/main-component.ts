@@ -8,7 +8,15 @@ import "pixi-spine";
 import {BaseComponent} from "./base-component";
 
 export class MainComponent extends BaseComponent {
+    private screenBorder: PIXI.Graphics;
+    private fullScreenButton: PIXI.Container;
+    private fullScreenText: PIXI.Text;
+    private explorer: RotatingSprite;
+    private filteredBunnies: PIXI.Container;
+    private layeredBunnies: PIXI.Container;
+    private particlesContainer: PIXI.particles.ParticleContainer;
     private spineBoy: PIXI.spine.Spine;
+
     private particlesEmitter: PIXI.particles.Emitter;
 
     private textStyle = new PIXI.TextStyle({
@@ -30,14 +38,7 @@ export class MainComponent extends BaseComponent {
         this.appWidth = appWidth;
         this.appHeight = appHeight;
 
-        this.drawScreenBorder();
-        this.drawSquare(appWidth / 2 - 25, appHeight / 2 - 25);
-        this.addFullscreenText(this.appWidth / 2, this.appHeight / 2 - 50);
-        this.drawRotatingExplorer();
-        this.drawBunnies();
-        this.drawLayeredBunnies();
-        this.drawParticles();
-        this.drawSpineBoyAnim(appWidth * 0.5, appHeight);
+        this.createViews();
     }
 
     public stopEmittingParticles(): void {
@@ -53,85 +54,137 @@ export class MainComponent extends BaseComponent {
         }
     }
 
-    private drawSquare(x = 0, y = 0, s = 50, r = 10): void {
+    public drawSquare(x = 0, y = 0, s = 50, r = 10): void {
         this.drawRoundedRectangle(x, y, s, s, r);
     }
 
-    private drawRoundedRectangle(x = 0, y = 0, w = 50, h = 50, r = 10): void {
-        const graphics = new PIXI.Graphics();
-        graphics.lineStyle(2, 0xFF00FF, 1);
-        graphics.beginFill(0xFF00BB, 0.25);
-        graphics.drawRoundedRect(x, y, w, h, r);
-        graphics.endFill();
+    public drawRoundedRectangle(x = 0, y = 0, w = 50, h = 50, r = 10): void {
+        this.fullScreenButton = new PIXI.Container();
 
-        graphics.interactive = true;
-        graphics.buttonMode = true;
-        graphics.on("pointerup", () => {
+        const button = new PIXI.Graphics();
+        button.lineStyle(2, 0xFF00FF, 1);
+        button.beginFill(0xFF00BB, 0.25);
+        button.drawRoundedRect(0, 0, w, h, r);
+        button.endFill();
+
+        button.interactive = true;
+        button.buttonMode = true;
+        button.on("pointerup", () => {
             // pointerdown does not trigger a user event in chrome-android
             Wrapper.toggleFulscreen(document.getElementById("app-root"));
         });
 
-        this.addChild(graphics);
+        this.fullScreenButton.addChild(button);
+        this.fullScreenButton.position.set(x, y);
+
+        this.addChild(this.fullScreenButton);
     }
 
-    private drawScreenBorder(lineWidth: number = 4): void {
-        const halfLineWidth = lineWidth / 2;
+    public relocate(): void {
+        /*
+        this.screenBorder.width = this.appWidth - 2;
+        this.screenBorder.height = this.appHeight - 2;
+        window.console.log(this.screenBorder.width, this.screenBorder.height);
+        */
+        this.removeChild(this.screenBorder);
+        this.drawScreenBorder();
 
-        const graphics = new PIXI.Graphics();
-        graphics.lineStyle(lineWidth, 0xFF00FF, 1);
-        graphics.drawRect(halfLineWidth, halfLineWidth, this.appWidth - lineWidth, this.appHeight - lineWidth);
+        this.fullScreenButton.position.set(this.appWidth / 2 - this.fullScreenButton.width / 2, this.appHeight / 2 - this.fullScreenButton.height / 2);
+        this.fullScreenText.position.set(this.appWidth / 2, this.appHeight / 2 - 50);
+        this.filteredBunnies.position.set(this.appWidth - this.filteredBunnies.width - 10, this.appHeight - this.filteredBunnies.height);
+        this.layeredBunnies.position.set((this.appWidth - this.layeredBunnies.width) - 10, 10);
+        this.particlesContainer.position.set(this.appWidth * 0.75, this.appHeight * 0.5);
+        this.spineBoy.position.set(this.appWidth * 0.5, this.appHeight);
 
-        this.addChild(graphics);
+        TweenLite.killTweensOf(this.explorer, true);
+        const maxEdge = Math.max(this.explorer.width, this.explorer.height);
+        this.explorer.position.set(Math.ceil(maxEdge / 2) + 10, Math.ceil(maxEdge / 2) + 10);
+        TweenLite.to(this.explorer, 2, {y: this.appHeight / 2});
+    }
+
+    /**
+     * TODO keep local appWith and appHeight is not a good idea perhaps.
+     */
+    public swapSize(): void {
+        const w = this.appWidth;
+        this.appWidth = this.appHeight;
+        this.appHeight = w;
+    }
+
+    private drawScreenBorder(width = 4): void {
+        const halfWidth = width / 2;
+
+        this.screenBorder = new PIXI.Graphics();
+        this.screenBorder.lineStyle(width, 0xFF00FF, 1);
+        this.screenBorder.drawRect(halfWidth, halfWidth, this.appWidth - width, this.appHeight - width);
+
+        this.addChild(this.screenBorder);
+
+        window.console.log(this.screenBorder.width, this.screenBorder.height);
     }
 
     private addFullscreenText(x: number, y: number): void {
-        const richText = new PIXI.Text("Click on the square to toggle fullscreen!", this.textStyle);
-        richText.anchor.set(0.5, 0.5);
-        richText.x = x;
-        richText.y = y;
+        this.fullScreenText = new PIXI.Text("Click on the square to toggle fullscreen!", this.textStyle);
+        this.fullScreenText.anchor.set(0.5, 0.5);
+        this.fullScreenText.x = x;
+        this.fullScreenText.y = y;
 
-        this.addChild(richText);
+        this.addChild(this.fullScreenText);
+    }
+
+    private createViews(): void {
+        this.drawSquare(this.appWidth / 2 - 25, this.appHeight / 2 - 25);
+        this.addFullscreenText(this.appWidth / 2, this.appHeight / 2 - 50);
+        this.drawScreenBorder();
+        this.drawRotatingExplorer();
+        this.drawBunnies();
+        this.drawLayeredBunnies();
+        this.drawParticles();
+        this.drawSpineBoyAnim(this.appWidth * 0.5, this.appHeight);
+    }
+
+    private removeViews(): void {
+        this.removeChildren();
     }
 
     private drawRotatingExplorer(): void {
         // This creates a texture from a "explorer.png" image
-        const explorer: RotatingSprite = new RotatingSprite(PIXI.loader.resources.explorer.texture);
+        this.explorer = new RotatingSprite(PIXI.loader.resources.explorer.texture);
 
         // Setup the position of the explorer
-        const maxEdge = Math.max(explorer.width, explorer.height);
-        explorer.position.set(Math.ceil(maxEdge / 2) + 10, Math.ceil(maxEdge / 2) + 10);
+        const maxEdge = Math.max(this.explorer.width, this.explorer.height);
+        this.explorer.position.set(Math.ceil(maxEdge / 2) + 10, Math.ceil(maxEdge / 2) + 10);
 
         // Rotate around the center
-        explorer.anchor.set(0.5, 0.5);
+        this.explorer.anchor.set(0.5, 0.5);
 
-        explorer.interactive = true;
-        explorer.buttonMode = true;
-        explorer.rotationVelocity = 0.02;
+        this.explorer.interactive = true;
+        this.explorer.buttonMode = true;
+        this.explorer.rotationVelocity = 0.02;
 
-        explorer.on("pointerdown", () => {
-            explorer.rotationVelocity *= -1;
+        this.explorer.on("pointerdown", () => {
+            this.explorer.rotationVelocity *= -1;
         });
 
         // Add the explorer to the scene we are building
-        this.addChild(explorer);
+        this.addChild(this.explorer);
 
         // Listen for frame updates
-        // TODO review ticker ref access from all views?
         this.ticker.add(() => {
             // each frame we spin the explorer around a bit
-            explorer.rotation += explorer.rotationVelocity;
+            this.explorer.rotation += this.explorer.rotationVelocity;
         });
 
-        TweenLite.to(explorer, 2, {y: this.appHeight / 2});
+        TweenLite.to(this.explorer, 2, {y: this.appHeight / 2});
     }
 
     private drawBunnies(): void {
-        const container = new PIXI.Container();
-        this.addChild(container);
+        this.filteredBunnies = new PIXI.Container();
+        this.addChild(this.filteredBunnies);
 
         const text = new PIXI.Text("Click us!", this.textStyle);
         text.anchor.set(0.5, 0.5);
-        container.addChild(text);
+        this.filteredBunnies.addChild(text);
 
         const bunniesContainer = new PIXI.Container();
         bunniesContainer.position.set(0, text.height + 5);
@@ -142,7 +195,7 @@ export class MainComponent extends BaseComponent {
             const randomFilter = filters[index];
             bunniesContainer.filters = [randomFilter];
         });
-        container.addChild(bunniesContainer);
+        this.filteredBunnies.addChild(bunniesContainer);
 
         // Create a 5x5 grid of bunnies
         for (let i = 0; i < 25; i++) {
@@ -154,8 +207,8 @@ export class MainComponent extends BaseComponent {
 
         text.position.set(bunniesContainer.width / 2, 0);
 
-        container.x = this.appWidth - container.width - 10;
-        container.y = this.appHeight - container.height;
+        this.filteredBunnies.x = this.appWidth - this.filteredBunnies.width - 10;
+        this.filteredBunnies.y = this.appHeight - this.filteredBunnies.height;
 
         // Filters
         const filters = [
@@ -173,16 +226,16 @@ export class MainComponent extends BaseComponent {
         layer.group.enableSort = true;
         this.addChild(layer);
 
-        const container = new PIXI.Container();
-        this.addChild(container);
-        container.parentLayer = layer;
+        this.layeredBunnies = new PIXI.Container();
+        this.addChild(this.layeredBunnies);
+        this.layeredBunnies.parentLayer = layer;
 
         // Create a 5x5 grid of bunnies
         for (let i = 0; i < 25; i++) {
             const bunny = new PIXI.Sprite(PIXI.loader.resources.bunny.texture);
             bunny.x = (i % 5) * 20;
             bunny.y = Math.floor(i / 5) * 20;
-            container.addChild(bunny);
+            this.layeredBunnies.addChild(bunny);
 
             bunny.parentLayer = layer;
 
@@ -196,16 +249,16 @@ export class MainComponent extends BaseComponent {
             }
         }
 
-        container.x = (this.appWidth - container.width) - 10;
-        container.y = 10;
+        this.layeredBunnies.x = (this.appWidth - this.layeredBunnies.width) - 10;
+        this.layeredBunnies.y = 10;
     }
 
     private drawParticles(): void {
-        const particlesContainer = new PIXI.particles.ParticleContainer();
-        particlesContainer.position.set(this.appWidth * 0.75, this.appHeight * 0.5);
-        this.addChild(particlesContainer);
+        this.particlesContainer = new PIXI.particles.ParticleContainer();
+        this.particlesContainer.position.set(this.appWidth * 0.75, this.appHeight * 0.5);
+        this.addChild(this.particlesContainer);
 
-        this.particlesEmitter = new PIXI.particles.Emitter(particlesContainer, PIXI.loader.resources.bubble.texture, {
+        this.particlesEmitter = new PIXI.particles.Emitter(this.particlesContainer, PIXI.loader.resources.bubble.texture, {
             alpha: {
                 start: 0.8,
                 end: 0.1,
@@ -259,7 +312,7 @@ export class MainComponent extends BaseComponent {
         const update = () => {
 
             // Update the next frame
-            // requestAnimationFrame(update); // TODO Not required if added to app.ticker...
+            // requestAnimationFrame(update);
 
             const now = Date.now();
 
@@ -304,5 +357,4 @@ export class MainComponent extends BaseComponent {
 
         this.addChild(this.spineBoy);
     }
-
 }

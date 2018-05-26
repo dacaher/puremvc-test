@@ -22,6 +22,7 @@ export class SampleMvcApp extends PixiApp {
             view: Dom.getElementOrCreateNew<HTMLCanvasElement>("app-canvas", "canvas", document.getElementById("app-root")),
             showFPS: true,
             showMediaInfo: true,
+            changeOrientation: true,
         });
 
         this._scale = scale;
