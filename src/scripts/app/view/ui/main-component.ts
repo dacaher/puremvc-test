@@ -5,12 +5,14 @@ import {AsciiFilter, CRTFilter, GlowFilter, OldFilmFilter, OutlineFilter, Shockw
 import "pixi-layers";
 import "pixi-particles";
 import "pixi-spine";
+import {AssetPriority} from "vendor/dacaher/pixi-assets-loader";
 import {BaseComponent} from "./base-component";
 
 export class MainComponent extends BaseComponent {
     private screenBorder: PIXI.Graphics;
     private fullScreenButton: PIXI.Container;
-    private fullScreenText: PIXI.Text;
+    private fullScreenText: PIXI.extras.BitmapText;
+    private _loadingText: PIXI.Text;
     private explorer: RotatingSprite;
     private filteredBunnies: PIXI.Container;
     private layeredBunnies: PIXI.Container;
@@ -27,11 +29,17 @@ export class MainComponent extends BaseComponent {
         wordWrapWidth: 440,
     });
 
+    private bitmapTextStyle: PIXI.extras.BitmapTextStyle = {font: "35px Desyrel", align: "center"};
+
     private appWidth: number;
     private appHeight: number;
 
     constructor(ticker: PIXI.ticker.Ticker) {
         super(ticker);
+    }
+
+    public get loadingText(): PIXI.Text {
+        return this._loadingText;
     }
 
     public init(appWidth: number, appHeight: number) {
@@ -89,17 +97,68 @@ export class MainComponent extends BaseComponent {
         this.removeChild(this.screenBorder);
         this.drawScreenBorder();
 
-        this.fullScreenButton.position.set(this.appWidth / 2 - this.fullScreenButton.width / 2, this.appHeight / 2 - this.fullScreenButton.height / 2);
-        this.fullScreenText.position.set(this.appWidth / 2, this.appHeight / 2 - 50);
-        this.filteredBunnies.position.set(this.appWidth - this.filteredBunnies.width - 10, this.appHeight - this.filteredBunnies.height);
-        this.layeredBunnies.position.set((this.appWidth - this.layeredBunnies.width) - 10, 10);
-        this.particlesContainer.position.set(this.appWidth * 0.75, this.appHeight * 0.5);
-        this.spineBoy.position.set(this.appWidth * 0.5, this.appHeight);
+        if (this.fullScreenButton) {
+            this.fullScreenButton.position.set(this.appWidth / 2 - this.fullScreenButton.width / 2, this.appHeight / 2 - this.fullScreenButton.height / 2);
+        }
 
-        TweenLite.killTweensOf(this.explorer, true);
-        const maxEdge = Math.max(this.explorer.width, this.explorer.height);
-        this.explorer.position.set(Math.ceil(maxEdge / 2) + 10, Math.ceil(maxEdge / 2) + 10);
-        TweenLite.to(this.explorer, 2, {y: this.appHeight / 2});
+        if (this.fullScreenText) {
+            this.fullScreenText.position.set(this.appWidth / 2 - this.fullScreenText.width / 2, this.appHeight / 2 - 125);
+        }
+
+        if (this._loadingText) {
+            this._loadingText.position.set(this.appWidth / 5, 10);
+        }
+
+        if (this.filteredBunnies) {
+            this.filteredBunnies.position.set(this.appWidth - this.filteredBunnies.width - 10, this.appHeight - this.filteredBunnies.height);
+        }
+
+        if (this.layeredBunnies) {
+            this.layeredBunnies.position.set((this.appWidth - this.layeredBunnies.width) - 10, 10);
+        }
+
+        if (this.particlesContainer) {
+            this.particlesContainer.position.set(this.appWidth * 0.75, this.appHeight * 0.5);
+        }
+
+        if (this.spineBoy) {
+            this.spineBoy.position.set(this.appWidth * 0.5, this.appHeight);
+        }
+
+        if (this.explorer) {
+            TweenLite.killTweensOf(this.explorer, true);
+            const maxEdge = Math.max(this.explorer.width, this.explorer.height);
+            this.explorer.position.set(Math.ceil(maxEdge / 2) + 10, Math.ceil(maxEdge / 2) + 10);
+            TweenLite.to(this.explorer, 2, {y: this.appHeight / 2});
+        }
+    }
+
+    public createViewsByPriority(priority: number): void {
+        switch (priority) {
+            case AssetPriority.HIGHEST:
+                this.addFullscreenText(this.appWidth / 2, this.appHeight / 2 - 125);
+                this.drawSpineBoyAnim();
+                break;
+
+            case AssetPriority.HIGH:
+                this.drawBunnies();
+                this.drawLayeredBunnies();
+                break;
+
+            case AssetPriority.NORMAL:
+                this.drawParticles();
+                break;
+
+            case AssetPriority.LOW:
+                break;
+
+            case AssetPriority.LOWEST:
+                this.drawRotatingExplorer();
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -124,23 +183,23 @@ export class MainComponent extends BaseComponent {
     }
 
     private addFullscreenText(x: number, y: number): void {
-        this.fullScreenText = new PIXI.Text("Click on the square to toggle fullscreen!", this.textStyle);
-        this.fullScreenText.anchor.set(0.5, 0.5);
-        this.fullScreenText.x = x;
-        this.fullScreenText.y = y;
+        this.fullScreenText = new PIXI.extras.BitmapText("Click on the square\n to toggle fullscreen!", this.bitmapTextStyle);
+        this.fullScreenText.position.set(x - this.fullScreenText.width / 2, y);
 
         this.addChild(this.fullScreenText);
     }
 
+    private drawLoadingText(x: number, y: number): void {
+        this._loadingText = new PIXI.Text("Loading... 0%", this.textStyle);
+        this._loadingText.position.set(x, y);
+
+        this.addChild(this._loadingText);
+    }
+
     private createViews(): void {
         this.drawSquare(this.appWidth / 2 - 25, this.appHeight / 2 - 25);
-        this.addFullscreenText(this.appWidth / 2, this.appHeight / 2 - 50);
         this.drawScreenBorder();
-        this.drawRotatingExplorer();
-        this.drawBunnies();
-        this.drawLayeredBunnies();
-        this.drawParticles();
-        this.drawSpineBoyAnim(this.appWidth * 0.5, this.appHeight);
+        this.drawLoadingText(this.appWidth / 5, 10);
     }
 
     private removeViews(): void {
@@ -148,8 +207,9 @@ export class MainComponent extends BaseComponent {
     }
 
     private drawRotatingExplorer(): void {
-        // This creates a texture from a "explorer.png" image
-        this.explorer = new RotatingSprite(PIXI.loader.resources.explorer.texture);
+        // This creates a texture from a "explorer.png" within the atlas
+        this.explorer = new RotatingSprite(PIXI.loader.resources.atlas1.textures!["explorer.png"]);
+        this.explorer.scale.set(2, 2);
 
         // Setup the position of the explorer
         const maxEdge = Math.max(this.explorer.width, this.explorer.height);
@@ -206,6 +266,8 @@ export class MainComponent extends BaseComponent {
         }
 
         text.position.set(bunniesContainer.width / 2, 0);
+
+        bunniesContainer.hitArea = new PIXI.Rectangle(0, 0, bunniesContainer.width, bunniesContainer.height);
 
         this.filteredBunnies.x = this.appWidth - this.filteredBunnies.width - 10;
         this.filteredBunnies.y = this.appHeight - this.filteredBunnies.height;
@@ -330,15 +392,15 @@ export class MainComponent extends BaseComponent {
         this.ticker.add(update);
     }
 
-    private drawSpineBoyAnim(x: number, y: number) {
+    private drawSpineBoyAnim() {
         // create a spine boy
         this.spineBoy = new PIXI.spine.Spine(PIXI.loader.resources.spineboy.spineData);
 
         this.spineBoy.scale.set(0.5);
 
         // set the position
-        this.spineBoy.x = x;
-        this.spineBoy.y = y;
+        this.spineBoy.x = this.appWidth * 0.5;
+        this.spineBoy.y = this.appHeight;
 
         // set up the mixes!
         this.spineBoy.stateData.setMix("walk", "jump", 0.2);

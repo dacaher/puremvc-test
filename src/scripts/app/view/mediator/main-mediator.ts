@@ -7,38 +7,33 @@ import {INotification} from "puremvc";
 
 export class MainMediator extends BaseMediator<MainComponent> {
     private appProxy: AppProxy;
-    private texturesLoaded: boolean;
 
     constructor(mediatorName?: string, viewComponent?: MainComponent) {
         super(mediatorName, viewComponent);
-
-        this.texturesLoaded = false;
-
-        this.addListeners();
     }
 
     public handleNotification(notification: INotification): void {
         switch (notification.getName()) {
             case NotificationNames.ALL_TEXTURES_LOADED:
-                this.texturesLoaded = true;
-                this.appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
-                this.view.init(this.appProxy.getAppWidth(), this.appProxy.getAppHeight());
                 break;
 
             case NotificationNames.RESIZE_START:
-//                this.view.visible = false;
-//                this.view.stopEmittingParticles();
                 break;
 
             case NotificationNames.RESIZE_END:
-//                this.view.visible = true;
-//                this.view.startEmittingParticles();
-
-                if (notification.getBody().stage.orientation.changed && this.texturesLoaded) {
+                if (notification.getBody().stage.orientation.changed) {
                     this.view.swapSize(); // TODO set size from appProxy.getAppWidth & appProxy.getAppHeight
                     this.view.relocate();
                 }
 
+                break;
+
+            case NotificationNames.GROUP_ASSETS_LOADED:
+                this.view.createViewsByPriority(notification.getBody().priority);
+                break;
+
+            case NotificationNames.GROUP_ASSETS_PROGRESS:
+                this.view.loadingText.text = `Loading... ${notification.getBody().progress.toFixed(2)}%`;
                 break;
         }
     }
@@ -48,11 +43,16 @@ export class MainMediator extends BaseMediator<MainComponent> {
             NotificationNames.ALL_TEXTURES_LOADED,
             NotificationNames.RESIZE_START,
             NotificationNames.RESIZE_END,
+            NotificationNames.GROUP_ASSETS_LOADED,
+            NotificationNames.GROUP_ASSETS_PROGRESS,
         ];
     }
 
     public onRegister(): void {
-        // TODO impl
+        this.appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+
+        this.view.init(this.appProxy.getAppWidth(), this.appProxy.getAppHeight());
+        this.addListeners();
     }
 
     protected removeListeners(): void {

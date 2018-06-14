@@ -11,14 +11,20 @@ export class SoundsProxy extends BaseProxy<SoundsVO> {
     }
 
     public addSounds(sounds: { [key: string]: Howl }): void {
-        this.vo.sounds = sounds;
+        Object.keys(sounds).forEach(key => {
+            this.vo.sounds[key] = sounds[key];
+        });
     }
 
     public playSound(id: string): void {
-        this.vo.sounds[id].play();
+        if (this.vo.sounds[id]) {
+            this.vo.sounds[id].play();
+        }
     }
 
     public stopSound(id: string): void {
-        this.vo.sounds[id].stop();
+        if (this.vo.sounds[id]) {
+            this.vo.sounds[id].stop();
+        }
     }
 }

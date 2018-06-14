@@ -1,3 +1,3 @@
 export class SoundNames {
-    public static readonly MUSIC = "music";
+    public static readonly MUSIC = "sound1";
 }

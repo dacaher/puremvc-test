@@ -5,6 +5,7 @@ import {AppProxy} from "app/model/proxy/app-proxy";
 import {BaseMediator} from "app/view/mediator/base-mediator";
 import {ToggleSoundComponent} from "app/view/ui/toggle-sound-component";
 import {INotification} from "puremvc";
+import {AssetPriority} from "vendor/dacaher/pixi-assets-loader";
 
 export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
 
@@ -14,28 +15,42 @@ export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
         this.addListeners();
     }
 
+    /**
+     * @inheritdoc
+     */
     public onRegister(): void {
         // Nothing to do here
     }
 
+    /**
+     * @inheritdoc
+     */
     public listNotificationInterests(): string[] {
         return [
             NotificationNames.ALL_TEXTURES_LOADED,
             NotificationNames.SOUNDS_READY,
             NotificationNames.SOUND_PLAY_ENDED,
             NotificationNames.RESIZE_END,
+            NotificationNames.GROUP_ASSETS_LOADED,
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public handleNotification(notification: INotification): void {
         let appProxy: AppProxy;
 
         switch (notification.getName()) {
-            case NotificationNames.ALL_TEXTURES_LOADED:
-                appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
-                // TODO review initialization of views!!
-                this.view.init();
-                this.view.position.set(appProxy.getAppWidth() / 2 - this.view.width / 2, appProxy.getAppHeight() * 0.1);
+            case NotificationNames.GROUP_ASSETS_LOADED:
+
+                if (notification.getBody().priority === AssetPriority.NORMAL) {
+                    appProxy = this.facade().retrieveProxy(ProxyNames.APP_PROXY) as AppProxy;
+                    // TODO review initialization of views!!
+                    this.view.init();
+                    this.view.position.set(appProxy.getAppWidth() / 2 - this.view.width / 2, appProxy.getAppHeight() * 0.1);
+                }
+
                 break;
 
             case NotificationNames.SOUNDS_READY:
@@ -53,11 +68,17 @@ export class ToggleSoundMediator extends BaseMediator<ToggleSoundComponent> {
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     protected addListeners(): void {
         this.view.on(ToggleSoundComponent.PLAY_CLICK, this.onPlayClick.bind(this));
         this.view.on(ToggleSoundComponent.STOP_CLICK, this.onStopClick.bind(this));
     }
 
+    /**
+     * @inheritdoc
+     */
     protected removeListeners(): void {
         this.view.off(ToggleSoundComponent.PLAY_CLICK, this.onPlayClick.bind(this));
         this.view.off(ToggleSoundComponent.STOP_CLICK, this.onStopClick.bind(this));

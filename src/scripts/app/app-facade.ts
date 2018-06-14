@@ -40,7 +40,7 @@ export class AppFacade extends Facade {
 
         this.registerCommand(NotificationNames.STARTUP, StartupCommand);
         this.registerCommand(NotificationNames.ERROR, HandleErrorCommand);
-        this.registerCommand(NotificationNames.ALL_SOUNDS_LOADED, InitSoundsCommand);
+        this.registerCommand(NotificationNames.GROUP_ASSETS_LOADED, InitSoundsCommand);
         this.registerCommand(NotificationNames.PLAY_SOUND, PlaySoundCommand);
         this.registerCommand(NotificationNames.STOP_SOUND, StopSoundCommand);
         this.registerCommand(NotificationNames.RESIZE_END, ResizeCommand);

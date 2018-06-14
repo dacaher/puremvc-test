@@ -7,7 +7,9 @@ export class ToggleSoundComponent extends BaseComponent {
 
     private playButton: PIXI.Sprite;
     private stopButton: PIXI.Sprite;
-    private textField: PIXI.Text;
+    private textField: PIXI.extras.BitmapText;
+
+    private bitmapTextStyle: PIXI.extras.BitmapTextStyle = {font: "35px Desyrel", align: "center"};
 
     constructor(ticker: PIXI.ticker.Ticker) {
         super(ticker);
@@ -61,13 +63,7 @@ export class ToggleSoundComponent extends BaseComponent {
     }
 
     private createText(): void {
-        this.textField = new PIXI.Text("Loading sounds...", new PIXI.TextStyle({
-            fontFamily: "Verdana",
-            fontSize: 18,
-            fill: "#FFFFFF",
-            wordWrap: true,
-            wordWrapWidth: 440,
-        }));
+        this.textField = new PIXI.extras.BitmapText("Loading sounds...", this.bitmapTextStyle);
         this.textField.position.set(this.playButton.width + 10, this.playButton.height / 2 - this.textField.height / 2);
 
         this.addChild(this.textField);

@@ -1,41 +1,65 @@
 {
-  "gfx": [
+  "fonts": [
+    {
+      "id": "desyrel",
+      "url": "assets/fonts/desyrel.xml",
+      "priority": 100
+    }
+  ],
+  "textures": [
     {
       "id": "explorer",
       "url": "assets/gfx/explorer.png",
-      "priority": 0
+      "priority": 25
     },
     {
       "id": "bunny",
       "url": "assets/gfx/bunny.png",
-      "priority": 0
+      "priority": 75
     },
     {
       "id": "bubble",
       "url": "assets/gfx/Bubbles99.png",
-      "priority": 0
+      "priority": 50
     },
     {
       "id": "play",
       "url": "assets/gfx/play.png",
-      "priority": 0
+      "priority": 50
     },
     {
       "id": "stop",
       "url": "assets/gfx/stop.png",
-      "priority": 0
+      "priority": 50
     },
+    {
+      "id": "atlas1",
+      "url": "assets/gfx/treasureHunter.json",
+      "priority": 0
+    }
+  ],
+  "animations": [
     {
       "id": "spineboy",
       "url": "assets/gfx/spineboy.json",
-      "priority": 0
+      "priority": 100
     }
   ],
   "sfx": [
     {
-      "id": "music",
+      "id": "sound1",
       "url": "assets/sfx/sound1.mp3",
-      "priority": 0
+      "priority": 0,
+      "autoplay": false,
+      "loop": false,
+      "mute": false,
+      "rate": 1
+    },
+    {
+      "id": "sound2",
+      "url": "assets/sfx/sound2.mp3",
+      "priority": 0,
+      "autoplay": true
     }
   ]
 }

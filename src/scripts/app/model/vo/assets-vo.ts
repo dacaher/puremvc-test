@@ -1,4 +1,4 @@
-import {Asset} from "app/global/interfaces/asset";
+import {Asset} from "vendor/dacaher/pixi-assets-loader";
 
 export class AssetsVO {
     // TODO hace falta tenerlo separado??
@@ -6,9 +6,17 @@ export class AssetsVO {
     private gfx: { [key: string]: Asset };
     private sfx: { [key: string]: Asset };
 
+    private _totalAssets: number;
+    private _loadingProgress: number;
+    private _assetsCount: { [key: number]: { total: number, progress: number } };
+
     constructor() {
         this.gfx = {};
         this.sfx = {};
+
+        this._totalAssets = 0;
+        this._loadingProgress = 0;
+        this._assetsCount = {};
     }
 
     public addAsset(asset: Asset): void {
@@ -56,5 +64,28 @@ export class AssetsVO {
 
     public getSfxAsset(id: string): Asset {
         return this.sfx[id];
+    }
+
+    public get assetsCount(): { [p: number]: { total: number; progress: number } } {
+        return this._assetsCount;
+    }
+
+    public set assetsCount(value: { [p: number]: { total: number; progress: number } }) {
+        this._assetsCount = value;
+    }
+    public get loadingProgress(): number {
+        return this._loadingProgress;
+    }
+
+    public set loadingProgress(value: number) {
+        this._loadingProgress = value;
+    }
+
+    public get totalAssets(): number {
+        return this._totalAssets;
+    }
+
+    public set totalAssets(value: number) {
+        this._totalAssets = value;
     }
 }
