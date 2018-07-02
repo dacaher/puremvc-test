@@ -12,7 +12,7 @@ export class StartupCommand extends MacroCommand {
      * Generally, it is best to prep the Model (mostly registering proxies) followed by
      * preparation of the View (mostly registering Mediators).
      */
-    public initializeMacroCommand() {
+    public initializeMacroCommand(): void {
         window.console.log("initializeMacroCommand called!");
         this.addSubCommand(PrepModelCommand);
         this.addSubCommand(PrepViewCommand);

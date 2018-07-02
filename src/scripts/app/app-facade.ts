@@ -1,12 +1,12 @@
 import {HandleErrorCommand} from "app/controller/handle-error-command";
 import {InitSoundsCommand} from "app/controller/init-sounds-command";
 import {PlaySoundCommand} from "app/controller/play-sound-command";
+import {ResizeCommand} from "app/controller/resize-command";
 import {StartupCommand} from "app/controller/startup-command";
 import {StopSoundCommand} from "app/controller/stop-sound-command";
 import {NotificationNames} from "app/global/constants/notification-names";
 import {SampleMvcApp} from "app/sample-mvc-app";
 import {Facade} from "puremvc";
-import {ResizeCommand} from "app/controller/resize-command";
 
 export class AppFacade extends Facade {
 
@@ -28,7 +28,7 @@ export class AppFacade extends Facade {
      * @param app
      * The HTML root node element of the application.
      */
-    public startup(app: SampleMvcApp) {
+    public startup(app: SampleMvcApp): void {
         this.sendNotification(NotificationNames.STARTUP, app);
     }
 

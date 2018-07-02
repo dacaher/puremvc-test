@@ -335,7 +335,7 @@ export class SampleApp {
         this.app.ticker.add(update);
     }
 
-    private drawSpineBoyAnim() {
+    private drawSpineBoyAnim(): void {
         // create a spine boy
         this.spineBoy = new PIXI.spine.Spine(PIXI.loader.resources.spineboy.spineData);
 
@@ -363,7 +363,7 @@ export class SampleApp {
         this.app.stage.addChild(this.spineBoy);
     }
 
-    private drawPlayMusic() {
+    private drawPlayMusic(): void {
         const sound = new Howl({
             src: ["assets/sfx/sound1.mp3"],
         });

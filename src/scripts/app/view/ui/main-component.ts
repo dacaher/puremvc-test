@@ -42,7 +42,7 @@ export class MainComponent extends BaseComponent {
         return this._loadingText;
     }
 
-    public init(appWidth: number, appHeight: number) {
+    public init(appWidth: number, appHeight: number): void {
         this.appWidth = appWidth;
         this.appHeight = appHeight;
 
@@ -392,7 +392,7 @@ export class MainComponent extends BaseComponent {
         this.ticker.add(update);
     }
 
-    private drawSpineBoyAnim() {
+    private drawSpineBoyAnim(): void {
         // create a spine boy
         this.spineBoy = new PIXI.spine.Spine(PIXI.loader.resources.spineboy.spineData);
 
